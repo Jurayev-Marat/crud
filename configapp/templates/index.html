@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bosh Sahifa - Do'konIM{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-gradient text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-3">Do'koningizni Boshqaring</h1>
+                <p class="lead mb-4">Mahsulotlar, kategoriyalar va buyurtmalarni osongina boshqaring. Zamonaviy interfeys va kuchli funksionallik.</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="{% url 'add_product' %}" class="btn btn-light btn-lg">
+                        <i class="bi bi-plus-circle me-2"></i>Yangi Mahsulot
+                    </a>
+                    <a href="#products" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-grid me-2"></i>Mahsulotlarni Ko'rish
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center">
+                <i class="bi bi-cart-check" style="font-size: 8rem; opacity: 0.9;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <div class="card stats-card bg-gradient-1 text-center py-4">
+                    <div class="card-body">
+                        <i class="bi bi-tags display-4"></i>
+                        <h2 class="mt-3 fw-bold">{{ categories_count }}</h2>
+                        <p class="mb-0 fs-5">Kategoriya</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card bg-gradient-2 text-center py-4">
+                    <div class="card-body">
+                        <i class="bi bi-box-seam display-4"></i>
+                        <h2 class="mt-3 fw-bold">{{ products_count }}</h2>
+                        <p class="mb-0 fs-5">Mahsulot</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card bg-gradient-3 text-center py-4">
+                    <div class="card-body">
+                        <i class="bi bi-truck display-4"></i>
+                        <h2 class="mt-3 fw-bold">{{ suppliers_count }}</h2>
+                        <p class="mb-0 fs-5">Yetkazib Beruvchi</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card stats-card bg-gradient-4 text-center py-4">
+                    <div class="card-body">
+                        <i class="bi bi-receipt display-4"></i>
+                        <h2 class="mt-3 fw-bold">{{ orders_count }}</h2>
+                        <p class="mb-0 fs-5">Buyurtma</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="text-center mb-3">Kategoriyalar</h2>
+                <p class="text-center text-muted">Mavjud mahsulot kategoriyalari</p>
+            </div>
+        </div>
+        
+        <div class="row g-3 justify-content-center">
+            {% for category in cat %}
+            <div class="col-auto">
+                <a href="{% url 'category' category.id %}" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-tag me-2"></i>{{ category.category_name }}
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Hozircha kategoriyalar mavjud emas. 
+                    <a href="{% url 'add_category' %}" class="alert-link">Birinchi kategoriyani qo'shing</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section id="products" class="py-5">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h2 class="mb-2">So'ngi Mahsulotlar</h2>
+                        <p class="text-muted mb-0">Eng yangi qo'shilgan mahsulotlar</p>
+                    </div>
+                    <a href="{% url 'add_product' %}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>Yangi Mahsulot
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% if pro %}
+        <div class="row g-4">
+            {% for item in pro %}
+            <div class="col-xl-3 col-lg-4 col-md-6 product-card">
+                <div class="card card-hover h-100">
+                    <div class="position-relative">
+                        {% if item.photo %}
+                            <img src="{{ item.photo.url }}" class="card-img-top" alt="{{ item.product_name }}" 
+                                 style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=200&fit=crop" 
+                                 class="card-img-top" alt="Rasm yo'q" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-success fs-6">${{ item.unit_price }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ item.product_name }}</h5>
+                        <p class="card-text text-muted mb-2">
+                            <i class="bi bi-tags me-1"></i>{{ item.category.category_name }}
+                        </p>
+                        <p class="card-text text-muted small mb-3">
+                            <i class="bi bi-building me-1"></i>{{ item.suppliers.company_name }}
+                        </p>
+                        
+                        <div class="mt-auto">
+                            <div class="btn-group w-100" role="group">
+                                <a href="{% url 'update_product' item.id %}" class="btn btn-outline-warning btn-sm">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a href="{% url 'delete_product' item.id %}" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-inbox display-1 text-muted mb-3"></i>
+            <h3 class="text-muted">Hozircha mahsulotlar mavjud emas</h3>
+            <p class="text-muted mb-4">Birinchi mahsulotingizni qo'shing va do'koningizni boshlang</p>
+            <a href="{% url 'add_product' %}" class="btn btn-primary btn-lg">
+                <i class="bi bi-plus-circle me-2"></i>Birinchi Mahsulotni Qo'shish
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

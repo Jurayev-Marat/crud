@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Mahsulot Qo'shish - Do'konIM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-success text-white py-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-plus-circle me-3 fs-4"></i>
+                        <h4 class="mb-0">Yangi Mahsulot Qo'shish</h4>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Xatoliklar
+                        </h6>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ field.label }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" enctype="multipart/form-data" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label for="{{ form.product_name.id_for_label }}" class="form-label required-field">
+                                    <i class="bi bi-box me-2"></i>{{ form.product_name.label }}
+                                </label>
+                                {{ form.product_name }}
+                                <div class="form-text">
+                                    Mahsulot nomida maxsus belgilar bo'lmasligi kerak
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <label for="{{ form.unit_price.id_for_label }}" class="form-label required-field">
+                                    <i class="bi bi-currency-dollar me-2"></i>{{ form.unit_price.label }}
+                                </label>
+                                {{ form.unit_price }}
+                                <div class="form-text">
+                                    Narx 1$ dan 10$ gacha bo'lishi kerak
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <label for="{{ form.category.id_for_label }}" class="form-label required-field">
+                                    <i class="bi bi-tags me-2"></i>{{ form.category.label }}
+                                </label>
+                                {{ form.category }}
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <label for="{{ form.suppliers.id_for_label }}" class="form-label required-field">
+                                    <i class="bi bi-truck me-2"></i>{{ form.suppliers.label }}
+                                </label>
+                                {{ form.suppliers }}
+                            </div>
+                            
+                            <div class="col-md-12 mb-4">
+                                <label for="{{ form.photo.id_for_label }}" class="form-label">
+                                    <i class="bi bi-image me-2"></i>{{ form.photo.label }}
+                                </label>
+                                {{ form.photo }}
+                                <div class="form-text">
+                                    Mahsulot rasmini yuklash (ixtiyoriy)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end pt-3 border-top">
+                            <a href="{% url 'home' %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Ortga
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-lg me-2"></i>Mahsulotni Qo'shish
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

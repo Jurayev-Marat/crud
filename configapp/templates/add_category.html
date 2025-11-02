@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Kategoriya Qo'shish - Do'konIM{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-primary text-white py-3">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-tag me-3 fs-4"></i>
+                        <h4 class="mb-0">Yangi Kategoriya Qo'shish</h4>
+                    </div>
+                </div>
+                
+                <div class="card-body p-4">
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <h6 class="alert-heading">
+                            <i class="bi bi-exclamation-triangle me-2"></i>Xatoliklar
+                        </h6>
+                        <ul class="mb-0">
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ field.label }}: {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <label for="{{ form.category_name.id_for_label }}" class="form-label required-field">
+                                    <i class="bi bi-card-heading me-2"></i>{{ form.category_name.label }}
+                                </label>
+                                {{ form.category_name }}
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Kategoriya nomi bosh harf bilan boshlanishi va raqam bo'lmasligi kerak
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12 mb-4">
+                                <label for="{{ form.description.id_for_label }}" class="form-label">
+                                    <i class="bi bi-text-paragraph me-2"></i>{{ form.description.label }}
+                                </label>
+                                {{ form.description }}
+                                <div class="form-text">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Kategoriya haqida qo'shimcha ma'lumot (ixtiyoriy)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end pt-3 border-top">
+                            <a href="{% url 'home' %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Ortga
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-2"></i>Kategoriyani Qo'shish
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+    }
+</style>
+{% endblock %}
